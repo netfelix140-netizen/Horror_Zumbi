@@ -1,0 +1,332 @@
+
+<> <h1 style="color: green;">Horror Zumbi</h1>
+
+<div id="cenario">
+
+    <div id="fundo">🏙️</div>
+
+    <div id="obstaculo"></div>
+  <script>
+
+let noite = false;
+
+setInterval(function() {
+
+    let fundo = document.getElementById("fundo");
+
+    if (noite === false) {
+
+        fundo.textContent = "🌆";
+        noite = true;
+
+    } else {
+
+        fundo.textContent = "🏙️";
+        noite = false;
+
+    }
+
+}, 10000);
+
+  </script>
+
+</div>
+
+
+<style>
+
+#jogador {
+    position: absolute;
+    left: 15px;
+    top: 100px;
+}
+
+</style>
+
+<div id="jogador">
+
+<pre>
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫
+          ⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛
+          🟫⬜⬛⬛🟫🟫⬜⬛⬛🟫
+          🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫
+          🟫🟫🟫🟫⬛⬛🟫🟫🟫🟫
+      🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+      🟥🟥🟥🟥🟥🟨🟨🟨🟨🟥🟥🟥🟥🟥
+      🟥🟥🟥🟥🟨🟨🟨🟨🟨🟨🟥🟥🟥🟥
+      🟥🟥🟥🟥🟨🟨🟨🟨🟨🟨🟥🟥🟥🟥
+      🟫🟫🟥🟥🟥🟨🟨🟨🟨🟥🟥🟥🟫🟫
+      🟫🟫🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟫🟫
+          🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+          🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+          🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+          🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        ⬛⬜⬜⬛        ⬛⬜⬜⬛
+        ⬛⬜⬜⬛        ⬛⬜⬜⬛
+          ⬛⬛            ⬛⬛
+</pre>
+
+</div>
+<script>
+
+let jogador = document.getElementById("jogador");
+
+let distancia = 0;
+let pulando = false;
+  let jogoComecou = false;
+
+
+/* MOVIMENTO */
+
+setInterval(function() {
+
+    distancia = distancia + 2;
+
+}, 30);
+
+
+/* PULO */
+  function pular() {
+
+    jogoComecou = true;
+
+    if (pulando) {
+        return;
+    }
+
+    pulando = true;
+
+    jogador.style.top = "50px";
+
+    setTimeout(function() {
+
+        jogador.style.top = "200px";
+
+        pulando = false;
+
+    }, 1200);
+
+  }
+
+
+/* OBSTÁCULOS */
+
+let obstaculos = [
+    "📦",
+    "🧱",
+    "🌳",
+    "🌲",
+    "🌴",
+    "🧟‍♂️",
+    "🧟‍♀️",
+    "🐻‍❄️",
+    "🧟"
+];
+
+
+function novoObstaculo() {
+
+    let numero = Math.floor(
+        Math.random() * obstaculos.length
+    );
+
+    document.getElementById("obstaculo").textContent =
+        obstaculos[numero];
+
+}
+
+
+/* COLISÃO */
+
+function verificarColisao() {
+
+    let jogadorRect =
+        jogador.getBoundingClientRect();
+
+    let obstaculo =
+        document.getElementById("obstaculo");
+
+    let obstaculoRect =
+        obstaculo.getBoundingClientRect();
+
+
+    let jogadorPe = {
+
+        left: jogadorRect.left + 20,
+
+        right: jogadorRect.right - 20,
+
+        top: jogadorRect.bottom - 80,
+
+        bottom: jogadorRect.bottom
+
+    };
+
+
+    let bateu =
+
+        jogadorPe.left < obstaculoRect.right &&
+
+        jogadorPe.right > obstaculoRect.left &&
+
+        jogadorPe.top < obstaculoRect.bottom &&
+
+        jogadorPe.bottom > obstaculoRect.top;
+
+
+    if (bateu) {
+
+        morrer();
+
+    }
+
+}
+
+
+/* MORTE */
+
+function morrer() {
+
+    document.getElementById("gameover").style.display =
+        "block";
+
+}
+
+
+/* RENASCER */
+
+function renascer() {
+
+    location.reload();
+
+}
+
+
+/* CRIAR OBSTÁCULOS */
+
+novoObstaculo();
+
+setInterval(function() {
+
+    if (!jogoComecou) {
+        return;
+    }
+
+    let obstaculo =
+        document.getElementById("obstaculo");
+
+    novoObstaculo();
+
+    let posicao = window.innerWidth;
+
+    obstaculo.style.left =
+        posicao + "px";
+
+
+    let movimento = setInterval(function() {
+
+        posicao = posicao - 8;
+
+        obstaculo.style.left =
+            posicao + "px";
+
+        verificarColisao();
+
+
+        if (posicao < -150) {
+
+            clearInterval(movimento);
+
+        }
+
+    }, 30);
+
+}, 2000);
+
+</script>
+<div id="controles">
+
+<button onclick="pular()">⬆️ PULAR</button>
+
+</div>
+<div id="gameover">
+
+    <h1>NETGAME OVER</h1>
+
+    <button id="renascer" onclick="renascer()">
+        🔄 RENASCER
+    </button>
+
+</div>
+<style>
+
+#controles {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+
+button {
+    font-size: 25px;
+    padding: 15px 25px;
+}
+#cenario {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 50px;
+}
+
+#fundo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 100px;
+}
+
+#obstaculo {
+    position: absolute;
+    left: 100%;
+    bottom: 190px;
+    font-size: 90px;
+}
+  
+#gameover {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: darkred;
+    z-index: 10000;
+    text-align: center;
+}
+
+#gameover h1 {
+    color: darkgoldenrod;
+    font-size: 50px;
+    margin-top: 150px;
+}
+
+#renascer {
+    font-size: 25px;
+    padding: 15px 30px;
+}
+</style>
+
