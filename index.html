@@ -183,24 +183,25 @@ document.getElementById("obstaculo").textContent =
 
 }
 
-function explodirObstaculo() {
-obstaculoExplodido = true;
-obstaculo.textContent = "";
-obstaculo.style.left = "-1000px";
-if (skinAtual !== "Mega Zumbizin") {
-return;
-}
+ function explodirObstaculo() {
 
-let obstaculo =  
-    document.getElementById("obstaculo");  
+    let obstaculo =
+        document.getElementById("obstaculo");
 
-obstaculo.textContent = "💥";
-obstaculo.style.left = "-1000px";
-temBomba = false;
+    if (skinAtual !== "Mega Zumbizin") {
+        return;
+    }
 
-proximaBomba = tempo + 10;
-document.getElementById("explodir")
-.style.display = "none";
+    obstaculoExplodido = true;
+
+    obstaculo.textContent = "💥";
+    obstaculo.style.left = "-1000px";
+
+    temBomba = false;
+    proximaBomba = tempo + 10;
+
+    document.getElementById("explodir")
+        .style.display = "none";
 
 jogador.innerHTML = `
 
@@ -322,8 +323,7 @@ novoObstaculo();
 obstaculoExplodido = false;
 novoObstaculo();
 
-let posicao = window.innerWidth;
-let posicao = window.innerWidth;  
+let posicao = window.innerWidth; 
 
 obstaculo.style.left =  
     posicao + "px";  
