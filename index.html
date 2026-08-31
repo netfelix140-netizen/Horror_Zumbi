@@ -359,20 +359,26 @@ onclick="explodirObstaculo()">
 </button>
 
 </div>  
-<style>  #controles {
-position: fixed;
-bottom: 20px;
-left: 50%;
-transform: translateX(-50%);
-z-index: 9999;
-}
+<style>
 #explodir {
 position: fixed;
 bottom: -100px;
 }
-  button {
+  #controles {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+
+    display: flex;
+    gap: 20px;
+}
+
+button {
     font-size: 28px;
-    padding: 30px 70px;
+    width: 350px;
+    height: 100px;
 }
 
 #cenario {
