@@ -73,7 +73,7 @@ let tempo = 0;
 let temBomba = false;
 let proximaBomba = 10;
 let skinAtual = "Zumbizin";
-
+let obstaculoExplodido = false;
 setInterval(function() {
 
 if (!jogoComecou) {  
@@ -184,7 +184,9 @@ document.getElementById("obstaculo").textContent =
 }
 
 function explodirObstaculo() {
-
+obstaculoExplodido = true;
+obstaculo.textContent = "";
+obstaculo.style.left = "-1000px";
 if (skinAtual !== "Mega Zumbizin") {
 return;
 }
@@ -317,7 +319,10 @@ let obstaculo =
     document.getElementById("obstaculo");  
 
 novoObstaculo();  
+obstaculoExplodido = false;
+novoObstaculo();
 
+let posicao = window.innerWidth;
 let posicao = window.innerWidth;  
 
 obstaculo.style.left =  
