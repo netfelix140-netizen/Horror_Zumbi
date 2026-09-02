@@ -242,6 +242,16 @@ jogador.innerHTML = `
 
 function verificarColisao() {
 
+    let obstaculo = document.getElementById("obstaculo");
+
+    if (obstaculoExplodido) {
+        return;
+    }
+
+    let jogadorRect = jogador.getBoundingClientRect();
+
+    // resto da função...
+
 let jogadorRect =  
     jogador.getBoundingClientRect();  
 
@@ -318,8 +328,7 @@ if (!jogoComecou) {
 
 let obstaculo =  
     document.getElementById("obstaculo");  
-
-novoObstaculo();  
+ 
 obstaculoExplodido = false;
 novoObstaculo();
 
