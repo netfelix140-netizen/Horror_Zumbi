@@ -250,52 +250,39 @@ function verificarColisao() {
 
     let jogadorRect = jogador.getBoundingClientRect();
 
-    // resto da função...
+    if (obstaculo.textContent === "💥") {
+        return;
+    }
 
-let jogadorRect =  
-    jogador.getBoundingClientRect();  
+    let obstaculoRect = obstaculo.getBoundingClientRect();
 
-let obstaculo =  
-    document.getElementById("obstaculo");  
+    let jogadorPe = {
 
-// Se o obstáculo foi explodido, não causa dano  
-if (obstaculo.textContent === "💥") {  
-    return;  
-}  
+        left: jogadorRect.left + 20,
 
-let obstaculoRect =  
-    obstaculo.getBoundingClientRect();  
+        right: jogadorRect.right - 20,
 
+        top: jogadorRect.bottom - 80,
 
-let jogadorPe = {  
+        bottom: jogadorRect.bottom
 
-    left: jogadorRect.left + 20,  
+    };
 
-    right: jogadorRect.right - 20,  
+    let bateu =
 
-    top: jogadorRect.bottom - 80,  
+        jogadorPe.left < obstaculoRect.right &&
 
-    bottom: jogadorRect.bottom  
+        jogadorPe.right > obstaculoRect.left &&
 
-};  
+        jogadorPe.top < obstaculoRect.bottom &&
 
+        jogadorPe.bottom > obstaculoRect.top;
 
-let bateu =  
+    if (bateu) {
 
-    jogadorPe.left < obstaculoRect.right &&  
+        morrer();
 
-    jogadorPe.right > obstaculoRect.left &&  
-
-    jogadorPe.top < obstaculoRect.bottom &&  
-
-    jogadorPe.bottom > obstaculoRect.top;  
-
-
-if (bateu) {  
-
-    morrer();  
-
-}
+    }
 
 }
 
