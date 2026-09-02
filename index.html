@@ -134,6 +134,24 @@ setInterval(function() {
 distancia = distancia + 2;
 
 }, 30);
+  let movimento = setInterval(function() {
+
+    if (obstaculoExplodido) {
+        clearInterval(movimento);
+        return;
+    }
+
+    posicao = posicao - 8;
+
+    obstaculo.style.left = posicao + "px";
+
+    verificarColisao();
+
+    if (posicao < -150) {
+        clearInterval(movimento);
+    }
+
+}, 30);
 
 /* PULO */
 function pular() {
