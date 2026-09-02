@@ -2,8 +2,6 @@
 
 <div id="cenario">  <div id="fundo">🏙️</div>  
 
-<div id="obstaculo"></div>
-
   <script>  
   
 let noite = false;  
@@ -127,31 +125,6 @@ jogador.innerHTML = `
 
 }, 1000);
 
-/* MOVIMENTO */
-
-setInterval(function() {
-
-distancia = distancia + 2;
-
-}, 30);
-  let movimento = setInterval(function() {
-
-    if (obstaculoExplodido) {
-        clearInterval(movimento);
-        return;
-    }
-
-    posicao = posicao - 8;
-
-    obstaculo.style.left = posicao + "px";
-
-    verificarColisao();
-
-    if (posicao < -150) {
-        clearInterval(movimento);
-    }
-
-}, 30);
 
 /* PULO */
 function pular() {
@@ -323,43 +296,215 @@ location.reload();
 
 /* CRIAR OBSTÁCULOS */
 
-novoObstaculo();
+function criarObstaculo() {
+
+    if (!jogoComecou) {
+        return;
+    }
+
+    let obstaculo = document.createElement("div");
+
+    obstaculo.className = "obstaculo";
+
+    let numero = Math.floor(
+        Math.random() * obstaculos.length
+    );
+
+    obstaculo.textContent = obstaculos[numero];
+
+    document.getElementById("cenario").appendChild(obstaculo);
+
+    let posicao = window.innerWidth;
+
+    obstaculo.style.left = posicao + "px";
+
+    let explodido = false;
+
+    function movimento() {
+
+        if (explodido) {
+            obstaculo.remove();
+            return;
+        }
+
+        posicao = posicao - 8;
+
+        obstaculo.style.left = posicao + "px";
+
+        verificarColisao(obstaculo);
+
+        if (posicao < -150) {
+            clearInterval(intervalo);
+            obstaculo.remove();
+        }
+
+    }
+
+    let intervalo = setInterval(movimento, 30);
+
+    obstaculo.explodir = function() {
+
+        if (explodido) {
+            return;
+        }
+
+        explodido = true;
+
+        obstaculo.textContent = "💥";
+
+        setTimeout(function() {
+            obstaculo.remove();
+        }, 100);
+
+    };
+
+}
+
+
+/* COLISÃO */
+
+function verificarColisao(obstaculo) {
+
+    if (!obstaculo || !obstaculo.isConnected) {
+        return;
+    }
+
+    let jogadorRect =
+        jogador.getBoundingClientRect();
+
+    let obstaculoRect =
+        obstaculo.getBoundingClientRect();
+
+    let jogadorPe = {
+
+        left: jogadorRect.left + 20,
+
+        right: jogadorRect.right - 20,
+
+        top: jogadorRect.bottom - 80,
+
+        bottom: jogadorRect.bottom
+
+    };
+
+    let bateu =
+
+        jogadorPe.left < obstaculoRect.right &&
+
+        jogadorPe.right > obstaculoRect.left &&
+
+        jogadorPe.top < obstaculoRect.bottom &&
+
+        jogadorPe.bottom > obstaculoRect.top;
+
+    if (bateu) {
+
+        morrer();
+
+    }
+
+}
+
+
+/* EXPLODIR OBSTÁCULO */
+
+function explodirObstaculo() {
+
+    if (skinAtual !== "Mega Zumbizin") {
+        return;
+    }
+
+    let obstaculosAtuais =
+        document.querySelectorAll(".obstaculo");
+
+    if (obstaculosAtuais.length === 0) {
+        return;
+    }
+
+    let jogadorRect =
+        jogador.getBoundingClientRect();
+
+    let alvo = null;
+
+    let menorDistancia = Infinity;
+
+    obstaculosAtuais.forEach(function(obstaculo) {
+
+        let rect =
+            obstaculo.getBoundingClientRect();
+
+        let distancia =
+            Math.abs(rect.left - jogadorRect.right);
+
+        if (rect.left < jogadorRect.right + 500 &&
+            distancia < menorDistancia) {
+
+            menorDistancia = distancia;
+            alvo = obstaculo;
+
+        }
+
+    });
+
+    if (alvo && alvo.explodir) {
+
+        alvo.explodir();
+
+    }
+
+    temBomba = false;
+
+    proximaBomba = tempo + 10;
+
+    document.getElementById("explodir")
+        .style.display = "none";
+
+
+    jogador.innerHTML = `
+
+<pre>
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+          🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫
+          ⬛⬛⬜⬛⬛⬛⬛⬜⬛⬛
+          🟫⬜⬛⬛🟫🟫⬜⬛⬛🟫
+          🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫
+          🟫🟫🟫🟫⬛⬛🟫🟫🟫🟫
+      🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+      🟥🟥🟥🟥🟥🟨🟨🟨🟨🟥🟥🟥🟥🟥
+      🟥🟥🟥🟥🟨🟨🟨🟨🟨🟨🟥🟥🟥🟥
+      🟥🟥🟥🟥🟨🟨🟨🟨🟨🟨🟥🟥🟥🟥
+      🟫🟫🟥🟥🟥🟨🟨🟨🟨🟥🟥🟥🟫🟫
+      🟫🟫🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟫🟫
+          🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+          🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+          🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+          🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        🟩🟩🟩🟩        🟩🟩🟩🟩
+        ⬛⬜⬜⬛        ⬛⬜⬜⬛
+        ⬛⬜⬜⬛        ⬛⬜⬜⬛
+          ⬛⬛            ⬛⬛
+</pre>`;
+
+}
+
+
+/* GERAR OBSTÁCULOS */
 
 setInterval(function() {
 
-if (!jogoComecou) {  
-    return;  
-}  
+    if (!jogoComecou) {
+        return;
+    }
 
-let obstaculo =  
-    document.getElementById("obstaculo");  
- 
-obstaculoExplodido = false;
-novoObstaculo();
-
-let posicao = window.innerWidth; 
-
-obstaculo.style.left =  
-    posicao + "px";  
-
-
-let movimento = setInterval(function() {  
-
-    posicao = posicao - 8;  
-
-    obstaculo.style.left =  
-        posicao + "px";  
-
-    verificarColisao();  
-
-
-    if (posicao < -150) {  
-
-        clearInterval(movimento);  
-
-    }  
-
-}, 30);
+    criarObstaculo();
 
 }, 3000);
 
@@ -453,7 +598,7 @@ right: 10px;
 background: black;
 color: white;
 padding: 10px;
-font-size: 25px;
+font-size: 25px; 
 z-index: 9999;
 }
 </style>
